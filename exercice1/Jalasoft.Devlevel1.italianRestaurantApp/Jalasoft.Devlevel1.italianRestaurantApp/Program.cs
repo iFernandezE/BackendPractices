@@ -4,7 +4,7 @@ internal class Program
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("Italian restaurant Console App");
+        Console.WriteLine("*Italian restaurant Console App*\n");
         var dishesMenu = new Dictionary<string, double>();
         var beveragesMenu = new Dictionary<string, double>();
         prepareMenu(dishesMenu, beveragesMenu);
@@ -31,8 +31,12 @@ internal class Program
             }
             ordersQueue.Enqueue(order);
             if (ordersQueue.Count()==5){
-                prepairOrders(ordersQueue);
+                while(ordersQueue.Count() > 0){
+                    prepairOrders(ordersQueue);
+                }
+                
             }
+            op = appOption();
         }
     }
 
@@ -46,7 +50,7 @@ internal class Program
     private static int orderOption()
     {
         Console.Write(
-        "choose item to add:\n" +
+        "\nchoose item to add:\n" +
         "   1) dish.\n" +
         "   2) beverage\n" +
         "   3) nothing else\n" +
@@ -57,11 +61,11 @@ internal class Program
 
     private static int appOption()
     {
-        Console.Write("* Italian Restaurant App *\n" +
+        Console.Write("\n* Italian Restaurant App *\n" +
         "choose your option:\n" +
         "   1) make an order.\n" +
         "   2) exit\n" +
-        "   \n option> ");
+        "   option> ");
         int appOp = int.Parse( Console.ReadLine() );
         return appOp;
     }
