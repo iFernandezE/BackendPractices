@@ -30,10 +30,11 @@ internal class Program
                 opOrder = orderOption();
             }
             ordersQueue.Enqueue(order);
+            Console.WriteLine($"Queue Orders [{ordersQueue.Count()}]");
             if (ordersQueue.Count()==5){
-                while(ordersQueue.Count() > 0){
+                
                     prepairOrders(ordersQueue);
-                }
+                
                 
             }
             op = appOption();
@@ -42,7 +43,7 @@ internal class Program
 
     private static void prepairOrders(Queue<order> ordersQueue)
     {
-        while(ordersQueue.Count()!=0){
+        while(ordersQueue.Count()>0){
             ordersQueue.Dequeue().getOrderInfo();
         }
     }
