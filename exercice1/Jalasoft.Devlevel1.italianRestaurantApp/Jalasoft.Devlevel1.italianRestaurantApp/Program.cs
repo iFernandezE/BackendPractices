@@ -34,8 +34,7 @@ internal class Program
             if (ordersQueue.Count()==5){
                 
                     prepairOrders(ordersQueue);
-                
-                
+              
             }
             op = appOption();
         }
