@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿using System;
+
+internal class Program
 {
     public static void Main(string[] args)
     {
@@ -8,21 +10,60 @@
         prepareMenu(dishesMenu, beveragesMenu);
         var ordersQueue = new Queue<order>();
         // console:
-        int op = opConsole();
-        while(op ==1 && ordersQueue.Count<=5){
-            
+        int op = appOption();
+        while(op ==1){
+            Console.Write("Client Name> ");
+            string clienName = Console.ReadLine();
+            Console.Write("pay method(cash, card)> ");
+            string payMethod = Console.ReadLine();
+            var order = new order(clienName,payMethod);
+            int opOrder = orderOption();
+            while(opOrder!=3){
+                if (opOrder == 1)
+                {
+                    order.addDish(dishesMenu);
+                }
+                else if (opOrder == 2)
+                {
+                    order.addBeverage(beveragesMenu);
+                }
+                opOrder = orderOption();
+            }
+            ordersQueue.Enqueue(order);
+            if (ordersQueue.Count()==5){
+                prepairOrders(ordersQueue);
+            }
         }
     }
 
-    
-    private static int opConsole()
+    private static void prepairOrders(Queue<order> ordersQueue)
     {
-        Console.WriteLine("* Italian Restaurant App *\n" +
+        while(ordersQueue.Count()!=0){
+            ordersQueue.Dequeue().getOrderInfo();
+        }
+    }
+
+    private static int orderOption()
+    {
+        Console.Write(
+        "choose item to add:\n" +
+        "   1) dish.\n" +
+        "   2) beverage\n" +
+        "   3) nothing else\n" +
+        "   option> ");
+        int opOrder = int.Parse(Console.ReadLine());
+        return opOrder;
+    }
+
+    private static int appOption()
+    {
+        Console.Write("* Italian Restaurant App *\n" +
         "choose your option:\n" +
         "   1) make an order.\n" +
-        "   2) exit\n");
-        int op = int.Parse( Console.ReadLine() );
-        return op;
+        "   2) exit\n" +
+        "   \n option> ");
+        int appOp = int.Parse( Console.ReadLine() );
+        return appOp;
     }
 
     private static void prepareMenu(Dictionary<string, double> dishesMenu, Dictionary<string, double> beveragesMenu)
@@ -48,23 +89,53 @@
         Beer
     }
     
-    public struct order{
+    public class order{
         public string clientName;
-        public List<string> dishes;
-        public List<string> beverages;
+        public string payMethod;
+        public Dictionary<string, string> dishesList = new Dictionary<string, string>();
+        public Dictionary<string, string> beveragesList = new Dictionary<string, string>();
+        public double total;
         
-        public order(string clientName){
+        public order(string clientName, string payMethod){
             this.clientName = clientName;
+            this.payMethod = payMethod;
         }
-        public void addDish(){
-            
-        }
-        public void addBeverage(){
-
-        }
-        public double getTotalPrice()
+        public void addDish(Dictionary<string, double> dishesMenu)
         {
+            Console.Write("choose dish:\n"+
+            "   0) " + dishes.Spaghetti.ToString()+"\n"+
+            "   1) " + dishes.Lasagna.ToString()+ "\n" +
+            "   2) " + dishes.Pizza.ToString()+ "\n" +
+            "   3) " + dishes.Calzone.ToString()+ "\n" +
+            "\n    option> ");
+            int dishOp = int.Parse(Console.ReadLine());
+            Console.Write("\n    amount> ");
+            int amount = int.Parse(Console.ReadLine());
+            total = total + dishesMenu[((dishes)dishOp).ToString()]*amount;
+            dishesList.Add(((dishes)dishOp).ToString(), amount.ToString());
+            Console.WriteLine("agregado");
 
+        }
+        public void addBeverage(Dictionary<string, double> beveragesMenu)
+        {
+            Console.Write("choose dish:\n" +
+            "   0) " + beverages.Soda.ToString() + "\n" +
+            "   1) " + beverages.Wine.ToString() + "\n" +
+            "   2) " + beverages.Beer.ToString() + "\n" +
+            "\n option> ");
+            int beverageOp = int.Parse(Console.ReadLine());
+            Console.Write("\n    amount> ");
+            int amount = int.Parse(Console.ReadLine());
+            total = total + beveragesMenu[((beverages)beverageOp).ToString()]*amount;
+            beveragesList.Add(((beverages)beverageOp).ToString(), amount.ToString());
+        }
+        public string getOrderInfo(){
+            string info = $"Customer {clientName}: ";
+            foreach(var (key,value) in dishesList){
+                info+= value.ToString()+"(s) "+key+" ";
+            }
+            info += $"total cost: ${total} / payment method:{payMethod}";
+            return info;
         }
     }
 }
